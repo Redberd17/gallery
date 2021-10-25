@@ -5,8 +5,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.chugunova.mygallery.R
 import com.chugunova.mygallery.adapter.*
 import java.util.*
@@ -21,7 +20,8 @@ class MainFragment : Fragment(), ClickListener {
     private val imageList = ArrayList<Image>()
     lateinit var imageAdapter: ImageAdapter
     private lateinit var recyclerView: RecyclerView
-    var projection = arrayOf(MediaStore.MediaColumns.DATA)
+    private var projection = arrayOf(MediaStore.MediaColumns.DATA)
+    private val rowCount = 3
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,7 +31,7 @@ class MainFragment : Fragment(), ClickListener {
         recyclerView = view.findViewById(R.id.recyclerView)
         imageAdapter = ImageAdapter(imageList)
         imageAdapter.listener = this
-        recyclerView.layoutManager = GridLayoutManager(context, 3)
+        recyclerView.layoutManager = GridLayoutManager(context, rowCount)
         recyclerView.adapter = imageAdapter
         loadImages()
         return view
@@ -54,7 +54,14 @@ class MainFragment : Fragment(), ClickListener {
         }
         cursor.close()
         imageAdapter.notifyDataSetChanged()
-        imageAdapter.notifyDataSetChanged()
+    }
+
+    fun changeVisibleType() {
+        if (recyclerView.layoutManager is GridLayoutManager) {
+            recyclerView.layoutManager = LinearLayoutManager(context)
+        } else {
+            recyclerView.layoutManager = GridLayoutManager(context, rowCount)
+        }
     }
 
     override fun onClick(position: Int) {

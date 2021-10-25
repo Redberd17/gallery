@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/change_view_type"
+        android:orderInCategory="100"
+        android:title="@string/change_view_type"
+        app:showAsAction="always" />
+</menu>

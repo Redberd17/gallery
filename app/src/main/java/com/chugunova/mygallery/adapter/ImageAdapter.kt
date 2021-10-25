@@ -24,6 +24,7 @@ class ImageAdapter(private val images: List<Image>): RecyclerView.Adapter<ImageA
                 .into(itemView.ivGalleryImage)
 
             //add click listener here
+
         }
     }
 
