@@ -2,29 +2,31 @@ package com.chugunova.mygallery.adapter
 
 import android.content.Context
 import android.view.*
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.chugunova.mygallery.R
 import com.chugunova.mygallery.helper.GlideApp
 import kotlinx.android.synthetic.main.gallery_item.view.*
 
-class ImageAdapter(private val images: List<Image>): RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
+class ImageAdapter(private val images: List<Image>) : RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
 
     private lateinit var context: Context
     lateinit var listener: ClickListener
 
 
-    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind() {
             val image = images[bindingAdapterPosition]
             GlideApp.with(context)
                 .load(image.imageUrl)
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(itemView.ivGalleryImage)
-
-            //add click listener here
-
+                .into(itemView.item_image)
+            val im = itemView.findViewById<ImageView>(R.id.item_image)
+            im.setOnClickListener {
+                listener.onClick(bindingAdapterPosition)
+            }
         }
     }
 

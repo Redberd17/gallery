@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.*
 import com.chugunova.mygallery.R
 import com.chugunova.mygallery.adapter.*
+import com.chugunova.mygallery.fullscreen.FullscreenFragment
 import java.util.*
 
 
@@ -18,10 +19,11 @@ class MainFragment : Fragment(), ClickListener {
     }
 
     private val imageList = ArrayList<Image>()
-    lateinit var imageAdapter: ImageAdapter
+    private lateinit var imageAdapter: ImageAdapter
     private lateinit var recyclerView: RecyclerView
     private var projection = arrayOf(MediaStore.MediaColumns.DATA)
     private val rowCount = 3
+    private var isGridView = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,9 +33,11 @@ class MainFragment : Fragment(), ClickListener {
         recyclerView = view.findViewById(R.id.recyclerView)
         imageAdapter = ImageAdapter(imageList)
         imageAdapter.listener = this
-        recyclerView.layoutManager = GridLayoutManager(context, rowCount)
+        recyclerView.layoutManager = setLayoutManager()
         recyclerView.adapter = imageAdapter
-        loadImages()
+        if (imageList.isEmpty()) {
+            loadImages()
+        }
         return view
     }
 
@@ -56,15 +60,29 @@ class MainFragment : Fragment(), ClickListener {
         imageAdapter.notifyDataSetChanged()
     }
 
+    private fun setLayoutManager(): RecyclerView.LayoutManager {
+        return if (isGridView)
+            GridLayoutManager(context, rowCount)
+        else
+            LinearLayoutManager(context)
+    }
+
     fun changeVisibleType() {
-        if (recyclerView.layoutManager is GridLayoutManager) {
-            recyclerView.layoutManager = LinearLayoutManager(context)
-        } else {
-            recyclerView.layoutManager = GridLayoutManager(context, rowCount)
-        }
+        isGridView = !isGridView
+        recyclerView.layoutManager = setLayoutManager()
     }
 
     override fun onClick(position: Int) {
-        //implement logic
+        val bundle = Bundle()
+        bundle.putSerializable(getString(R.string.images), imageList)
+        bundle.putInt(getString(R.string.position), position)
+        val fullscreenFragment = FullscreenFragment()
+        fullscreenFragment.arguments = bundle
+        val mainFragment =
+            requireActivity().supportFragmentManager.findFragmentByTag(getString(R.string.main_fragment)) as MainFragment
+        val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(mainFragment.id, fullscreenFragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
     }
 }

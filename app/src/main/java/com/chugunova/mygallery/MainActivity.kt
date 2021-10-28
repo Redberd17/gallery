@@ -13,7 +13,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.main)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, MainFragment.newInstance(), getString(R.string.main_fragment))
+                .replace(
+                    R.id.container,
+                    MainFragment.newInstance(),
+                    getString(R.string.main_fragment)
+                )
                 .commitNow()
         }
     }
@@ -26,7 +30,8 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.change_view_type) {
-            val mainFragment = supportFragmentManager.findFragmentByTag(getString(R.string.main_fragment)) as MainFragment
+            val mainFragment =
+                supportFragmentManager.findFragmentByTag(getString(R.string.main_fragment)) as MainFragment
             mainFragment.changeVisibleType()
         }
         return super.onOptionsItemSelected(item)

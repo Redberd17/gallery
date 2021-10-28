@@ -2,4 +2,7 @@
     <string name="app_name">MyGallery</string>
     <string name="change_view_type">Change view type</string>
     <string name="main_fragment">main_fragment</string>
+    <string name="full_screen_fragment">full_screen_fragment</string>
+    <string name="images">images</string>
+    <string name="position">position</string>
 </resources>
